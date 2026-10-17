@@ -27,3 +27,10 @@ Email headers are full of comments, quoted strings, and folding whitespace that 
 - A display name containing a comma must be quoted, but commas are valid inside quoted local-parts and display names. This parser does not split on commas — call it once per mailbox.
 - Domain literals (`user@[127.0.0.1]`) are not supported; only dot-atom domains are.
 - Comments are discarded entirely; they are not preserved on the returned `Mailbox`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
